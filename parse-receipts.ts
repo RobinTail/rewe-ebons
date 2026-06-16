@@ -21,6 +21,7 @@ const clarKg = /^\s*(\d+,\d{3})\s+kg\s+x\s+\d+,\d+/;
 let totalReceipts = 0;
 let totalItems = 0;
 let totalSpendAll = 0;
+let totalLeergut = 0;
 let totalPfand = 0;
 const errors: string[] = [];
 
@@ -57,8 +58,12 @@ for (const file of files) {
       }
 
       if (name.startsWith("LEERG")) {
-        totalPfand += price;
+        totalLeergut += price;
         continue;
+      }
+
+      if (name.startsWith("PFAND")) {
+        totalPfand += price;
       }
 
       const prev = items.get(name) ?? { totalSpend: 0, totalQty: 0 };
@@ -96,7 +101,7 @@ console.table(
   }))
 );
 
-console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${Math.abs(totalPfand).toFixed(2)} pfand returned`);
+console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${Math.abs(totalLeergut).toFixed(2)} leergut returned, €${totalPfand.toFixed(2)} pfand paid`);
 if (errors.length > 0) {
   console.log(`Errors: ${errors.length}`);
   for (const e of errors) console.log(`  ✗ ${e}`);
