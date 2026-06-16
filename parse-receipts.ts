@@ -21,6 +21,7 @@ const clarKg = /^\s*(\d+,\d{3})\s+kg\s+x\s+\d+,\d+/;
 let totalReceipts = 0;
 let totalItems = 0;
 let totalSpendAll = 0;
+let totalPfand = 0;
 const errors: string[] = [];
 
 for (const file of files) {
@@ -53,6 +54,11 @@ for (const file of files) {
         const kg = next.match(clarKg);
         if (stk) { qty = stk[1] ? parseInt(stk[1]) : 1; i++; }
         else if (kg) { qty = kg[1] ? parseGermanNum(kg[1]) : 1; i++; }
+      }
+
+      if (name.startsWith("PFAND")) {
+        totalPfand += price;
+        continue;
       }
 
       const prev = items.get(name) ?? { totalSpend: 0, totalQty: 0 };
@@ -98,7 +104,7 @@ for (let i = 0; i < Math.min(10, byQty.length); i++) {
   );
 }
 
-console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend`);
+console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${totalPfand.toFixed(2)} pfand returned`);
 if (errors.length > 0) {
   console.log(`Errors: ${errors.length}`);
   for (const e of errors) console.log(`  ✗ ${e}`);
