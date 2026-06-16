@@ -79,30 +79,22 @@ const bySpend = [...items.entries()].sort((a, b) => b[1].totalSpend - a[1].total
 const byQty = [...items.entries()].sort((a, b) => b[1].totalQty - a[1].totalQty);
 
 console.log("Top 10 by total spend");
-console.log("────────────────────");
-console.log("#  | Product" + " ".repeat(28) + " | Total €  | Qty");
-console.log("─".repeat(55));
-for (let i = 0; i < Math.min(10, bySpend.length); i++) {
-  const entry = bySpend[i];
-  if (!entry) break;
-  const [name, e] = entry;
-  console.log(
-    `${String(i + 1).padStart(2)} | ${name.padEnd(35)} | ${e.totalSpend.toFixed(2).padStart(7)} € | ${e.totalQty}`
-  );
-}
+console.table(
+  bySpend.slice(0, 10).map(([name, e], i) => ({
+    Product: name,
+    "Total €": e.totalSpend.toFixed(2),
+    Qty: e.totalQty,
+  }))
+);
 
 console.log("\nTop 10 by total quantity");
-console.log("───────────────────────");
-console.log("#  | Product" + " ".repeat(28) + " | Qty     | Total €");
-console.log("─".repeat(55));
-for (let i = 0; i < Math.min(10, byQty.length); i++) {
-  const entry = byQty[i];
-  if (!entry) break;
-  const [name, e] = entry;
-  console.log(
-    `${String(i + 1).padStart(2)} | ${name.padEnd(35)} | ${String(e.totalQty).padStart(5)} | ${e.totalSpend.toFixed(2)} €`
-  );
-}
+console.table(
+  byQty.slice(0, 10).map(([name, e], i) => ({
+    Product: name,
+    Qty: e.totalQty,
+    "Total €": e.totalSpend.toFixed(2),
+  }))
+);
 
 console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${totalPfand.toFixed(2)} pfand returned`);
 if (errors.length > 0) {
