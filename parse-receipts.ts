@@ -14,7 +14,7 @@ function parseGermanNum(s: string): number {
 type Entry = { totalSpend: number; totalQty: number };
 const items = new Map<string, Entry>();
 
-const itemRe = /^(.+)\s+(\d+,\d{2})\s+([AB])\s*\*?$/;
+const itemRe = /^(.+)\s+(-?\d+,\d{2})\s+([A-Z])\s*\*?$/;
 const clarStk = /^\s*(\d+)\s+Stk\s+x\s+\d+,\d+/;
 const clarKg = /^\s*(\d+,\d{3})\s+kg\s+x\s+\d+,\d+/;
 
@@ -56,7 +56,7 @@ for (const file of files) {
         else if (kg) { qty = kg[1] ? parseGermanNum(kg[1]) : 1; i++; }
       }
 
-      if (name.startsWith("PFAND")) {
+      if (name.startsWith("LEERG")) {
         totalPfand += price;
         continue;
       }
@@ -96,7 +96,7 @@ console.table(
   }))
 );
 
-console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${totalPfand.toFixed(2)} pfand returned`);
+console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${Math.abs(totalPfand).toFixed(2)} pfand returned`);
 if (errors.length > 0) {
   console.log(`Errors: ${errors.length}`);
   for (const e of errors) console.log(`  ✗ ${e}`);
