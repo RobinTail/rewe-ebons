@@ -80,7 +80,7 @@ const byQty = [...items.entries()].sort((a, b) => b[1].totalQty - a[1].totalQty)
 
 console.log("Top 10 by total spend");
 console.table(
-  bySpend.slice(0, 10).map(([name, e], i) => ({
+  bySpend.slice(0, 10).map(([name, e]) => ({
     Product: name,
     "Total €": e.totalSpend.toFixed(2),
     Qty: e.totalQty,
@@ -89,7 +89,7 @@ console.table(
 
 console.log("\nTop 10 by total quantity");
 console.table(
-  byQty.slice(0, 10).map(([name, e], i) => ({
+  byQty.slice(0, 10).map(([name, e]) => ({
     Product: name,
     Qty: e.totalQty,
     "Total €": e.totalSpend.toFixed(2),
