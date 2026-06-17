@@ -1,8 +1,9 @@
+#!/usr/bin/env node
 import { readdirSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { parseGermanNum, getPdfText } from "./utils.ts";
 
-const help = `Usage: node parse-receipts.ts <path>
+const help = `Usage: rewe-ebons <path>
 
 Analyze REWE eBon PDF receipts.
 

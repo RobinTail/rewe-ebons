@@ -1,7 +1,10 @@
 {
-  "name": "deine-rewe-ebons",
+  "name": "rewe-ebons",
   "private": true,
   "type": "module",
+  "bin": {
+    "rewe-ebons": "./parse-receipts.ts"
+  },
   "scripts": {
     "start": "node parse-receipts.ts",
     "test": "tsc --noEmit"

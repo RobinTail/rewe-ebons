@@ -23,7 +23,8 @@ Unpack the downloaded archive and ensure placing all the PDFs in a single folder
 
 ```bash
 pnpm install
-pnpm start /path/to/pdfs
+pnpm start /path/to/pdfs         # via package script
+rewe-ebons /path/to/pdfs         # as a CLI module
 ```
 
 ## Sample Output
