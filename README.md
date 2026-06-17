@@ -17,6 +17,11 @@ REWE offers a downloadable archive of all your electronic receipts at:
 - Handles piece items (`N Stk x price`) and weighted items (`weight kg x price/kg`)
 - Top 10 rankings by total spend and total quantity
 
+## Requirements
+
+**Node.js >= 24** — required for native TypeScript execution. Starting with Node 24, `.ts` files can be run directly
+with `node` without any flags or transpilation steps. No `tsx`, `ts-node`, or build step needed.
+
 ## Installation
 
 ```bash
