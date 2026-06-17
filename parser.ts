@@ -6,6 +6,8 @@ type Entry = { totalSpend: number; totalQty: number };
 const itemRe = /^(.+)\s+(-?\d+,\d{2})\s+([A-Z])\s*\*?$/;
 const clarStk = /^\s*(\d+)\s+Stk\s+x\s+\d+,\d+/;
 const clarKg = /^\s*(\d+,\d{3})\s+kg\s+x\s+\d+,\d+/;
+const dateRe = /^(\d{2})\.(\d{2})\.(\d{4})\s+\d{2}:\d{2}\s+Bon-Nr\.:\d+$/;
+const barWidth = 30;
 
 export async function parseReceipts(bonsDir: string, debug = false) {
   const files = readdirSync(bonsDir).filter((f) => f.endsWith(".pdf"));
@@ -22,7 +24,6 @@ export async function parseReceipts(bonsDir: string, debug = false) {
   let totalLeergut = 0;
   let totalPfand = 0;
   const errors: string[] = [];
-  const dateRe = /^(\d{2})\.(\d{2})\.(\d{4})\s+\d{2}:\d{2}\s+Bon-Nr\.:\d+$/;
 
   for (const file of files) {
     try {
@@ -127,7 +128,6 @@ export async function parseReceipts(bonsDir: string, debug = false) {
 
   const sortedMonths = [...monthlySpend.entries()].sort((a, b) => a[0].localeCompare(b[0]));
   const maxSpend = Math.max(...sortedMonths.map(([, v]) => v), 1);
-  const barWidth = 30;
 
   console.log("\nMonthly spend");
   console.log("─────────────");
