@@ -12,10 +12,10 @@
     "node": ">=24.0.0"
   },
   "bin": {
-    "rewe-ebons": "./parse-receipts.ts"
+    "rewe-ebons": "./index.ts"
   },
   "scripts": {
-    "start": "node parse-receipts.ts",
+    "start": "node index.ts",
     "test": "tsc --noEmit"
   },
   "dependencies": {
