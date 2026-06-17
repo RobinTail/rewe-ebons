@@ -15,18 +15,31 @@ export async function parseReceipts(bonsDir: string, debug = false) {
   }
 
   const items = new Map<string, Entry>();
+  const monthlySpend = new Map<string, number>();
   let totalReceipts = 0;
   let totalItems = 0;
   let totalSpendAll = 0;
   let totalLeergut = 0;
   let totalPfand = 0;
   const errors: string[] = [];
+  const dateRe = /^(\d{2})\.(\d{2})\.(\d{4})\s+\d{2}:\d{2}\s+Bon-Nr\.:\d+$/;
 
   for (const file of files) {
     try {
       const text = await getPdfText(bonsDir, file);
       const lines = text.split("\n");
       totalReceipts++;
+
+      let receiptSpend = 0;
+      let monthKey = "";
+
+      for (const line of lines) {
+        const dm = line.match(dateRe);
+        if (dm) {
+          monthKey = `${dm[3]!}-${dm[2]!}`;
+          break;
+        }
+      }
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
@@ -72,6 +85,10 @@ export async function parseReceipts(bonsDir: string, debug = false) {
         items.set(name, prev);
         totalItems++;
         totalSpendAll += price;
+        receiptSpend += price;
+      }
+      if (monthKey) {
+        monthlySpend.set(monthKey, (monthlySpend.get(monthKey) ?? 0) + receiptSpend);
       }
     } catch (err) {
       errors.push(`${file}: ${err instanceof Error ? err.message : String(err)}`);
@@ -107,6 +124,18 @@ export async function parseReceipts(bonsDir: string, debug = false) {
       `€${totalPfand.toFixed(2)} pfand paid`,
     ].join(", "),
   );
+
+  const sortedMonths = [...monthlySpend.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  const maxSpend = Math.max(...sortedMonths.map(([, v]) => v), 1);
+  const barWidth = 30;
+
+  console.log("\nMonthly spend");
+  console.log("─────────────");
+  for (const [month, spend] of sortedMonths) {
+    const barLen = Math.round((spend / maxSpend) * barWidth);
+    console.log(`${month} ${"█".repeat(barLen)} ${spend.toFixed(0)}€`);
+  }
+
   if (errors.length > 0) {
     console.log(`Errors: ${errors.length}`);
     for (const e of errors) console.log(`  ✗ ${e}`);
