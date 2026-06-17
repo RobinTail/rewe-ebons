@@ -1,11 +1,35 @@
-import { readdirSync } from "node:fs";
-import { join } from "node:path";
+import { readdirSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { parseGermanNum, getPdfText } from "./utils.ts";
 
-const bonsDir = import.meta.dirname
-  ? join(import.meta.dirname, "bons")
-  : join(process.cwd(), "bons");
+const help = `Usage: node parse-receipts.ts <path>
+
+Analyze REWE eBon PDF receipts.
+
+Arguments:
+  path    Directory containing PDF files (required)
+
+Options:
+  -h, --help    Show this help message`;
+
+const args = process.argv.slice(2);
+if (args.some(a => a === "-h" || a === "--help") || args.length === 0) {
+  console.log(help);
+  process.exit(0);
+}
+
+const bonsDir = resolve(args[0]!);
+
+if (!existsSync(bonsDir)) {
+  console.error(`Directory not found: ${bonsDir}`);
+  process.exit(1);
+}
+
 const files = readdirSync(bonsDir).filter(f => f.endsWith(".pdf"));
+if (files.length === 0) {
+  console.error(`No PDF files found in: ${bonsDir}`);
+  process.exit(1);
+}
 
 type Entry = { totalSpend: number; totalQty: number };
 const items = new Map<string, Entry>();

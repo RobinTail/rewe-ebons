@@ -9,8 +9,6 @@ REWE offers a downloadable archive of all your electronic receipts at:
 
 **https://www.rewe.de/shop/mydata/meine-einkaeufe**
 
-Place the downloaded PDF files into the `bons/` directory.
-
 ## Features
 
 - Parses all the receipts in seconds
@@ -21,9 +19,11 @@ Place the downloaded PDF files into the `bons/` directory.
 
 ## Usage
 
+Unpack the downloaded archive and ensure placing all the PDFs in a single folder.
+
 ```bash
 pnpm install
-pnpm start
+pnpm start /path/to/pdfs
 ```
 
 ## Sample Output
