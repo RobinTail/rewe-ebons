@@ -1,15 +1,11 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { join } from "node:path";
-import { PDFParse } from "pdf-parse";
+import { parseGermanNum, getPdfText } from "./utils.ts";
 
 const bonsDir = import.meta.dirname
   ? join(import.meta.dirname, "bons")
   : join(process.cwd(), "bons");
 const files = readdirSync(bonsDir).filter(f => f.endsWith(".pdf"));
-
-function parseGermanNum(s: string): number {
-  return parseFloat(s.replace(",", "."));
-}
 
 type Entry = { totalSpend: number; totalQty: number };
 const items = new Map<string, Entry>();
@@ -27,12 +23,7 @@ const errors: string[] = [];
 
 for (const file of files) {
   try {
-    const buf = readFileSync(join(bonsDir, file));
-    const parser = new PDFParse({ data: buf });
-    const result = await parser.getText();
-    const text = result.pages.map(p => p.text).join("\n");
-    await parser.destroy();
-
+    const text = await getPdfText(bonsDir, file);
     const lines = text.split("\n");
     totalReceipts++;
 
