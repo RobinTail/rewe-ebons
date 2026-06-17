@@ -17,14 +17,19 @@ REWE offers a downloadable archive of all your electronic receipts at:
 - Handles piece items (`N Stk x price`) and weighted items (`weight kg x price/kg`)
 - Top 10 rankings by total spend and total quantity
 
+## Installation
+
+```bash
+pnpm install --prod
+pnpm add -g . # register bin globally
+```
+
 ## Usage
 
 Unpack the downloaded archive and ensure placing all the PDFs in a single folder.
 
 ```bash
-pnpm install
-pnpm start /path/to/pdfs         # via package script
-rewe-ebons /path/to/pdfs         # as a CLI module
+rewe-ebons /path/to/pdfs
 ```
 
 ## Sample Output
