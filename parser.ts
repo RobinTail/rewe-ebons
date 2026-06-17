@@ -7,7 +7,7 @@ const itemRe = /^(.+)\s+(-?\d+,\d{2})\s+([A-Z])\s*\*?$/;
 const clarStk = /^\s*(\d+)\s+Stk\s+x\s+\d+,\d+/;
 const clarKg = /^\s*(\d+,\d{3})\s+kg\s+x\s+\d+,\d+/;
 
-export async function parseReceipts(bonsDir: string) {
+export async function parseReceipts(bonsDir: string, debug = false) {
   const files = readdirSync(bonsDir).filter(f => f.endsWith(".pdf"));
   if (files.length === 0) {
     console.error(`No PDF files found in: ${bonsDir}`);
@@ -32,7 +32,10 @@ export async function parseReceipts(bonsDir: string) {
         const line = lines[i];
         if (line === undefined) continue;
         const m = line.match(itemRe);
-        if (!m) continue;
+        if (!m) {
+          if (debug) console.debug(`  [${file}] skip: ${line}`);
+          continue;
+        }
 
         const name = m[1]?.trim();
         const price = m[2] ? parseGermanNum(m[2]) : 0;
