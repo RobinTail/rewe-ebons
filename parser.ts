@@ -100,7 +100,12 @@ export async function parseReceipts(bonsDir: string, debug = false) {
   );
 
   console.log(
-    `\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${Math.abs(totalLeergut).toFixed(2)} leergut returned, €${totalPfand.toFixed(2)} pfand paid`,
+    [
+      `\nSummary: ${totalReceipts} receipts`,
+      `${totalItems} items, €${totalSpendAll.toFixed(2)} total spend`,
+      `€${Math.abs(totalLeergut).toFixed(2)} leergut returned`,
+      `€${totalPfand.toFixed(2)} pfand paid`,
+    ].join(", "),
   );
   if (errors.length > 0) {
     console.log(`Errors: ${errors.length}`);
