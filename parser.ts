@@ -8,7 +8,7 @@ const clarStk = /^\s*(\d+)\s+Stk\s+x\s+\d+,\d+/;
 const clarKg = /^\s*(\d+,\d{3})\s+kg\s+x\s+\d+,\d+/;
 
 export async function parseReceipts(bonsDir: string, debug = false) {
-  const files = readdirSync(bonsDir).filter(f => f.endsWith(".pdf"));
+  const files = readdirSync(bonsDir).filter((f) => f.endsWith(".pdf"));
   if (files.length === 0) {
     console.error(`No PDF files found in: ${bonsDir}`);
     process.exit(1);
@@ -48,8 +48,13 @@ export async function parseReceipts(bonsDir: string, debug = false) {
         if (next !== undefined) {
           const stk = next.match(clarStk);
           const kg = next.match(clarKg);
-          if (stk) { qty = stk[1] ? parseInt(stk[1]) : 1; i++; }
-          else if (kg) { qty = kg[1] ? parseGermanNum(kg[1]) : 1; i++; }
+          if (stk) {
+            qty = stk[1] ? parseInt(stk[1]) : 1;
+            i++;
+          } else if (kg) {
+            qty = kg[1] ? parseGermanNum(kg[1]) : 1;
+            i++;
+          }
         }
 
         if (name.startsWith("LEERG")) {
@@ -82,7 +87,7 @@ export async function parseReceipts(bonsDir: string, debug = false) {
       Product: name,
       "Total €": e.totalSpend.toFixed(2),
       Qty: e.totalQty,
-    }))
+    })),
   );
 
   console.log("\nTop 10 by total quantity");
@@ -91,10 +96,12 @@ export async function parseReceipts(bonsDir: string, debug = false) {
       Product: name,
       Qty: e.totalQty,
       "Total €": e.totalSpend.toFixed(2),
-    }))
+    })),
   );
 
-  console.log(`\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${Math.abs(totalLeergut).toFixed(2)} leergut returned, €${totalPfand.toFixed(2)} pfand paid`);
+  console.log(
+    `\nSummary: ${totalReceipts} receipts, ${totalItems} items, €${totalSpendAll.toFixed(2)} total spend, €${Math.abs(totalLeergut).toFixed(2)} leergut returned, €${totalPfand.toFixed(2)} pfand paid`,
+  );
   if (errors.length > 0) {
     console.log(`Errors: ${errors.length}`);
     for (const e of errors) console.log(`  ✗ ${e}`);

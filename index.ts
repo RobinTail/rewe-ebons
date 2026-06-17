@@ -15,13 +15,13 @@ Options:
   -d, --debug   Log skipped lines for troubleshooting`;
 
 const args = process.argv.slice(2);
-if (args.some(a => a === "-h" || a === "--help") || args.length === 0) {
+if (args.some((a) => a === "-h" || a === "--help") || args.length === 0) {
   console.log(help);
   process.exit(0);
 }
 
 const debug = args.includes("-d") || args.includes("--debug");
-const pathArg = args.find(a => a !== "-d" && a !== "--debug");
+const pathArg = args.find((a) => a !== "-d" && a !== "--debug");
 if (!pathArg) {
   console.log(help);
   process.exit(0);
